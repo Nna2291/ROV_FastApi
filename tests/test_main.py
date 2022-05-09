@@ -1,8 +1,19 @@
-from fastapi.testclient import TestClient
+from urllib.parse import urljoin
 
-from main import app
+import requests
 
-client = TestClient(app)
+
+class CustomSession(requests.Session):
+    def __init__(self, base_url: str):
+        super().__init__()
+        self.base_url = base_url
+
+    def request(self, method, url, *args, **kwargs):
+        url = urljoin(self.base_url, url)
+        return super(CustomSession, self).request(method, url, *args, **kwargs)
+
+
+client = CustomSession('http://127.0.0.1:8000')
 
 
 def test_index_page():
