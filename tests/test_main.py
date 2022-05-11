@@ -13,7 +13,7 @@ class CustomSession(requests.Session):
         return super(CustomSession, self).request(method, url, *args, **kwargs)
 
 
-client = CustomSession('http://127.0.0.1:8000')
+client = CustomSession('http://192.168.1.39:8000')
 
 
 def test_index_page():
