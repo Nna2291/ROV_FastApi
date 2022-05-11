@@ -33,3 +33,5 @@ uvicorn==0.17.6
 watchgod==0.8.2
 websockets==10.3
 wheel==0.36.2
+
+pyserial~=3.5

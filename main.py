@@ -1,7 +1,14 @@
 from fastapi import FastAPI
 from models.engine_command import EngineCommand
+import serial
 
 app = FastAPI()
+ser = serial.Serial('dev/tty/USB1', 9600, timeout=1)
+
+
+def parse_to_bytes(a):
+    data = f"{a}\n"
+    return str.encode(data)
 
 
 @app.get("/")
@@ -16,8 +23,6 @@ async def root():
 
 @app.post("/engines")
 async def engine_command(command: EngineCommand):
-    return {'Successfully turn on engine': {
-        'pin_1': command.pin_1,
-        'pin_2': command.pin_2,
-        'speed': command.speed
-    }}
+    ser.write(parse_to_bytes(command.speed))
+    line = ser.readline().decode('utf-8').rstrip()
+    return line
