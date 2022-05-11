@@ -1,9 +1,14 @@
 from fastapi import FastAPI
+from serial import SerialException
+
 from models.engine_command import EngineCommand
 import serial
 
 app = FastAPI()
-ser = serial.Serial('dev/tty/USB1', 9600, timeout=1)
+try:
+    ser = serial.Serial('dev/ttyUSB1', 9600, timeout=1)
+except SerialException:
+    ser = serial.Serial('dev/ttyUSB0', 9600, timeout=1)
 
 
 def parse_to_bytes(a):
