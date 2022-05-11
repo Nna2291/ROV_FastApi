@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from serial import SerialException
+from serial.serialutil import SerialException
 
 from models.engine_command import EngineCommand
 import serial
