@@ -15,7 +15,7 @@ class CustomSession(requests.Session):
         return super(CustomSession, self).request(method, url, *args, **kwargs)
 
 
-client = CustomSession('http://127.0.0.1:8000/')
+client = CustomSession('http://169.254.198.100:8000/')
 
 
 def test_index_page():
@@ -26,7 +26,8 @@ def test_index_page():
 
 @pytest.mark.parametrize('execution_number', range(100))
 def test_engine(execution_number):
-    data = {'pin_1': 2, 'pin_2': 3, 'speed': random.randint(0, 255)}
+    data = {'task': 'POST', 'pin_1': random.choice([2, 3]), 'pin_2': 3,
+            'speed': random.randint(0, 255)}
     response = client.post('/engines', json=data)
     assert response.status_code == 200
-    assert response.text == f'"{data["pin_1"]};{data["pin_2"]};{data["speed"]}"'
+    assert response.text == f'"TURNED ON {data["pin_1"]} FOR {data["speed"]}"'

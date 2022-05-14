@@ -1,10 +1,10 @@
 import json
 
+import serial
 from fastapi import FastAPI
 from serial.serialutil import SerialException
 
 from models.engine_command import EngineCommand
-import serial
 
 app = FastAPI()
 try:
@@ -12,11 +12,6 @@ try:
 except SerialException:
     # ser = serial.Serial('/dev/cu.usbserial-1410', 9600, timeout=1.5)
     ser = serial.Serial('/dev/ttyUSB0', 9600, timeout=2)
-
-
-def parse_to_bytes(a):
-    data = f"{a}\n"
-    return str.encode(data)
 
 
 @app.get("/")
@@ -27,6 +22,14 @@ async def root():
     :return: JSON
     """
     return {"message": "Hello World"}
+
+
+@app.get("/data")
+async def data():
+    dict_ = {'task': 'GET'}
+    ser.write(json.dumps(dict_))
+    line = ser.readline().decode('utf-8').rstrip()
+    print(line)
 
 
 @app.post("/engines")

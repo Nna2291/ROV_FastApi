@@ -8,6 +8,6 @@ class EngineCommand(BaseModel):
     speed: int
 
     def __str__(self):
-        dict_ = {'pin_1': self.pin_1, 'pin_2': self.pin_2, 'speed': self.speed}
+        dict_ = {'task': 'POST', 'pin_1': self.pin_1, 'pin_2': self.pin_2, 'speed': self.speed}
         result = json.dumps(dict_)
         return result
