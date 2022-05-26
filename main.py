@@ -1,10 +1,11 @@
 import json
 
 import serial
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from serial.serialutil import SerialException
 
 from models.engine_command import EngineCommand
+from models.telemetry import Telemetry
 
 app = FastAPI()
 try:
@@ -25,15 +26,13 @@ async def root():
 
 
 @app.get("/data")
-async def data():
-    dict_ = {'task': 'GET'}
-    ser.write(json.dumps(dict_))
-    line = ser.readline().decode('utf-8').rstrip()
-    print(line)
+async def data(request: Request):
+    ser.write(json.dumps(request.json()).encode())
+    json_raw = ser.readline().decode('utf-8').rstrip()
+    return dict(Telemetry.parse_raw(json_raw))
 
 
 @app.post("/engines")
 async def engine_command(command: EngineCommand):
     ser.write(str.encode(str(command)))
-    line = ser.readline().decode('utf-8').rstrip()
-    return line
+    return 'ok'
