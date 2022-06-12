@@ -28,19 +28,35 @@ engine_4 = Engine(pin_1=28, pin_2=29, pin_3=5)
 engine_5 = Engine(pin_1=30, pin_2=31, pin_3=6)
 engine_6 = Engine(pin_1=32, pin_2=33, pin_3=7)
 
-i = 100
+i = 127
 
 
 def launch(command_first, command_second):
     req1 = client.post('/engines', json=command_first)
     req2 = client.post('/engines', json=command_second)
     assert req1.text == req2.text
-    time.sleep(5)
+    time.sleep(15)
     command_first['speed'] = 0
     command_second['speed'] = 0
     req1 = client.post('/engines', json=command_first)
     req2 = client.post('/engines', json=command_second)
     assert req1.text == req2.text
+
+
+def test_all():
+    req1 = client.post('/engines', json=engine_1.get_command(i))
+    req2 = client.post('/engines', json=engine_2.get_command(i))
+    req3 = client.post('/engines', json=engine_3.get_command(i))
+    req4 = client.post('/engines', json=engine_4.get_command(i))
+    req5 = client.post('/engines', json=engine_5.get_command(i))
+    req6 = client.post('/engines', json=engine_6.get_command(i))
+    time.sleep(30)
+    req1 = client.post('/engines', json=engine_1.get_command(0))
+    req2 = client.post('/engines', json=engine_2.get_command(0))
+    req3 = client.post('/engines', json=engine_3.get_command(0))
+    req4 = client.post('/engines', json=engine_4.get_command(0))
+    req5 = client.post('/engines', json=engine_5.get_command(0))
+    req6 = client.post('/engines', json=engine_6.get_command(0))
 
 
 def test_up():

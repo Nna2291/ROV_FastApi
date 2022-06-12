@@ -15,6 +15,6 @@ class Engine:
         json = {'task': 'POST', 'pin_1': pin_1, 'pin_2': pin_2, 'pin_3': pin_3, 'speed': speed}
         return json
 
-    def off(self) -> dict   :
+    def off(self) -> dict:
         json = {'task': 'POST', 'pin_1': self.pin_1, 'pin_2': self.pin_2, 'pin_3': self.pin_3, 'speed': 0}
         return json
